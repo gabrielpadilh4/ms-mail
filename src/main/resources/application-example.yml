@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ms_mail
+    username: postgres
+    password: database123
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: *********@gmail.com
+    password: ********** # https://support.google.com/accounts/answer/185833
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
