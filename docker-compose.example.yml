@@ -1,0 +1,54 @@
+version: '3.1'
+
+services:
+
+  mail-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mail-service
+    ports:
+      - '8080:8080'
+    depends_on:
+      - 'db'
+      - 'rabbitmq-messaging'
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/ms_mail
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: database123
+      SPRING_MAIL_HOST: smtp.gmail.com
+      SPRING_MAIL_PORT: 587
+      SPRING_MAIL_USERNAME: ****************@gmail.com
+      SPRING_MAIL_PASSWORD: **************** # https://support.google.com/accounts/answer/185833
+      SPRING_RABBITMQ_ADDRESSES: amqp://user:password@rabbitmq-messaging
+      SPRING_RABBITMQ_QUEUE: ms.mail.queue
+    networks:
+      - mail_net
+
+  rabbitmq-messaging:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    networks:
+      - mail_net
+
+  db:
+    image: postgres
+    volumes:
+      - /private/var/lib/postgresql:/var/lib/postgresql
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: ms_mail
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: database123
+    networks:
+      - mail_net
+
+networks:
+  mail_net:
+    driver: bridge
