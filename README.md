@@ -11,16 +11,21 @@
 
 To run this app locally, you will have to install `docker` and `docker-compose`.
 
-After install the two tools needed, you will have to change the value of variable in `docker-compose.yml` file on the root folder of the project. Basically, you have to change the information below:
+Copy the content of `docker-compose.example.yml` to `docker-compose.yml`, you will have to change the value of variable in `docker-compose.yml` file on the root folder of the project. Basically, you have to change the information below:
 ``` yml
       SPRING_MAIL_USERNAME: ********@gmail.com # I'm using GMAIL SMTP service to send the emails, so you will have to inform your own google email 
       SPRING_MAIL_PASSWORD: ******** # This is not the password of your Gmail account, please, follow this link https://support.google.com/accounts/answer/185833
 ```
 
-After setup the information above, run this command(this will generate the images and get up and running the containers):
+After setup the information above, run this command(this will generate the images and set up and running the containers):
 ```sh
 docker-compose up -d
 ```
+
+3 containers will be created:
+1 - Database
+2 - RabbitMQ
+3 - Java microservice(ms-mail)
 
 To test if everything is working, do a POST request in the endpoint `localhost:8080:send-mail` with the payload below filled with your information:
 ```json
